@@ -1,0 +1,280 @@
+/* --- 核心變數 --- */
+:root {
+    --bg-color: #212529;
+    --card-bg: #343a40;
+    --text-color: #f8f9fa;
+    --accent-color: #74c0fc;     /* 亮藍色 */
+    --accent-secondary: #63e6be; /* 亮綠色 */
+    --accent-tertiary: #ffd43b;  /* 黃色 */
+    --border-color: #000;
+    --shadow-offset: 4px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    /* 重點：字體設定 */
+    /* 優先使用 'Press Start 2P' (英文像素字)，接著是 'Noto Sans TC' (中文思源黑體)，最後是等寬字體 */
+    font-family: 'Press Start 2P', 'Noto Sans TC', 'Courier New', monospace; 
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* 針對內文段落，強制使用思源黑體比較好閱讀，標題維持像素風 */
+p, .description, .skill-name {
+    font-family: 'Noto Sans TC', monospace; 
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+h1, h2, h3, nav a, .pixel-btn {
+    font-family: 'Press Start 2P', 'Noto Sans TC', cursive;
+    text-transform: uppercase;
+    line-height: 1.4; /* 增加行高避免中文像素字擠在一起 */
+}
+
+/* --- 通用像素框樣式 --- */
+.pixel-box {
+    background-color: var(--card-bg);
+    border: 4px solid var(--border-color);
+    position: relative;
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px rgba(0,0,0,0.5);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* 按鈕樣式 */
+.pixel-btn {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: var(--border-color);
+    border: 4px solid var(--border-color);
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px rgba(0,0,0,0.5);
+    transition: all 0.1s;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.pixel-btn:active, .pixel-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.5);
+}
+
+.pixel-btn.secondary { background-color: var(--accent-secondary); }
+.pixel-btn.tertiary { background-color: var(--accent-tertiary); }
+.fit-btn { margin-top: 20px; text-align: center; margin-right: 0; width: 100%; box-sizing: border-box; }
+
+/* --- 導覽列 --- */
+nav {
+    background-color: var(--border-color);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 4px solid var(--accent-color);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.7rem;
+    padding: 5px;
+}
+
+nav a:hover {
+    color: var(--accent-color);
+    text-shadow: 2px 2px 0px #000;
+}
+
+/* --- 容器與版面 --- */
+.container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+/* 個人資訊 */
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border: 4px solid var(--border-color);
+    image-rendering: pixelated; 
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px var(--accent-color);
+    object-fit: cover;
+}
+
+.profile-info h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--accent-tertiary);
+    text-shadow: 3px 3px 0px #000;
+}
+
+.subtitle {
+    margin-top: 10px; 
+    opacity: 0.8;
+    color: var(--accent-secondary);
+}
+
+.social-links { margin-top: 20px; }
+
+/* 技能條 */
+.skill-item { margin-bottom: 1.5rem; }
+
+.skill-name {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 20px;
+    background-color: #222;
+    border: 2px solid var(--border-color);
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: var(--accent-secondary);
+    width: 0%; /* JS 控制動畫起始點 */
+    transition: width 1.5s ease-out;
+    background-image: linear-gradient(
+        45deg, 
+        rgba(255, 255, 255, 0.15) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        rgba(255, 255, 255, 0.15) 75%, 
+        transparent 75%, 
+        transparent
+    );
+    background-size: 20px 20px;
+}
+
+.progress-bar-fill.tertiary { background-color: var(--accent-tertiary); }
+.progress-bar-fill.accent { background-color: var(--accent-color); }
+
+/* 時間軸 */
+.timeline {
+    position: relative;
+    padding-left: 30px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.timeline-item {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -40px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    background-color: var(--accent-tertiary);
+    border: 2px solid #000;
+}
+
+.time-badge {
+    display: inline-block;
+    background: #000;
+    color: var(--accent-color);
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    border: 1px solid var(--accent-color);
+    font-family: 'Press Start 2P', cursive;
+}
+
+.org-name { font-weight: bold; color: #ccc; }
+
+/* 專案 Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-tertiary);
+}
+
+.project-role {
+    font-size: 0.8rem;
+    color: var(--accent-secondary);
+    margin-bottom: 0.5rem;
+    display: block;
+    margin-top: 5px;
+}
+
+/* 裝飾類 */
+.highlight-secondary { color: var(--accent-secondary); }
+.highlight-accent { color: var(--accent-color); }
+.highlight-tertiary { color: var(--accent-tertiary); }
+.divider { border: 2px solid #000; margin: 15px 0; }
+.section-title { margin-bottom: 20px; text-shadow: 2px 2px 0 #000; }
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    font-family: 'Press Start 2P', cursive;
+}
+
+/* RWD */
+@media (max-width: 600px) {
+    .profile-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    nav {
+        font-size: 0.6rem;
+        gap: 10px;
+    }
+
+    .pixel-box { padding: 1.5rem; }
+    
+    h1 { font-size: 1.2rem; }
+    h2 { font-size: 1rem; }
+}

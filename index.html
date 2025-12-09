@@ -4,265 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player 1: Profile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        /* --- 核心變數與重置 --- */
-        :root {
-            --bg-color: #212529;
-            --card-bg: #343a40;
-            --text-color: #f8f9fa;
-            --accent-color: #74c0fc; /* 亮藍色 */
-            --accent-secondary: #63e6be; /* 亮綠色 */
-            --accent-tertiary: #ffd43b; /* 黃色 */
-            --border-color: #000;
-            --shadow-offset: 4px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth; /* 錨點平滑捲動 */
-        }
-
-        body {
-            font-family: 'Courier New', Courier, monospace; /* 內文使用等寬字體保持科技感 */
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, nav a {
-            font-family: 'Press Start 2P', cursive; /* 標題使用像素字體 */
-            text-transform: uppercase;
-        }
-
-        /* --- 通用像素框樣式 (NES Style) --- */
-        .pixel-box {
-            background-color: var(--card-bg);
-            border: 4px solid var(--border-color);
-            position: relative;
-            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px rgba(0,0,0,0.5);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .pixel-btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--border-color);
-            border: 4px solid var(--border-color);
-            padding: 10px 20px;
-            text-decoration: none;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.8rem;
-            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px rgba(0,0,0,0.5);
-            transition: all 0.1s;
-            cursor: pointer;
-            margin-right: 10px;
-            margin-top: 10px;
-        }
-
-        /* 互動與動畫：按鈕點擊效果 */
-        .pixel-btn:active, .pixel-btn:hover {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.5);
-        }
-
-        .pixel-btn.secondary { background-color: var(--accent-secondary); }
-        .pixel-btn.tertiary { background-color: var(--accent-tertiary); }
-
-        /* --- 導覽列 --- */
-        nav {
-            background-color: var(--border-color);
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 4px solid var(--accent-color);
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 0.7rem;
-            padding: 5px;
-        }
-
-        nav a:hover {
-            color: var(--accent-color);
-            text-shadow: 2px 2px 0px #000;
-        }
-
-        /* --- 容器 --- */
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 20px;
-        }
-
-        /* --- 1. 個人資訊區塊 --- */
-        .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .avatar {
-            width: 150px;
-            height: 150px;
-            border: 4px solid var(--border-color);
-            /* 像素化圖片渲染 */
-            image-rendering: pixelated; 
-            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px var(--accent-color);
-        }
-
-        .profile-info h1 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent-tertiary);
-            text-shadow: 3px 3px 0px #000;
-        }
-
-        /* --- 2. 技能展示區 (進度條) --- */
-        .skill-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .skill-name {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .progress-bar-bg {
-            width: 100%;
-            height: 20px;
-            background-color: #222;
-            border: 2px solid var(--border-color);
-            position: relative;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: var(--accent-secondary);
-            width: 0%; /* 初始寬度，動畫用 */
-            transition: width 1s ease-out;
-            /* 條紋效果 */
-            background-image: linear-gradient(
-                45deg, 
-                rgba(255, 255, 255, 0.15) 25%, 
-                transparent 25%, 
-                transparent 50%, 
-                rgba(255, 255, 255, 0.15) 50%, 
-                rgba(255, 255, 255, 0.15) 75%, 
-                transparent 75%, 
-                transparent
-            );
-            background-size: 20px 20px;
-        }
-
-        /* --- 3. 經歷時間軸 --- */
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-            border-left: 4px solid var(--accent-color);
-        }
-
-        .timeline-item {
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        /* 時間軸的小方塊點 */
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -40px;
-            top: 5px;
-            width: 16px;
-            height: 16px;
-            background-color: var(--accent-tertiary);
-            border: 2px solid #000;
-        }
-
-        .time-badge {
-            display: inline-block;
-            background: #000;
-            color: var(--accent-color);
-            padding: 2px 8px;
-            font-size: 0.8rem;
-            margin-bottom: 5px;
-            border: 1px solid var(--accent-color);
-        }
-
-        /* --- 4. 專案作品集 (卡片 Grid) --- */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-        
-        /* 互動效果：Hover 卡片上浮 */
-        .project-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-tertiary);
-        }
-
-        .project-role {
-            font-size: 0.8rem;
-            color: var(--accent-secondary);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-
-        /* --- 響應式設計 (手機 < 600px) --- */
-        @media (max-width: 600px) {
-            .profile-section {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav {
-                font-size: 0.6rem;
-                gap: 10px;
-            }
-
-            .pixel-box {
-                padding: 1.5rem;
-            }
-            
-            h1 { font-size: 1.2rem; }
-            h2 { font-size: 1rem; }
-        }
-
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -278,12 +24,11 @@
         <section id="home" class="pixel-box profile-section">
             <img src="assets/S__15704072.jpg" alt="Avatar" class="avatar">
             <div class="profile-info">
-                <h1>PLAYER 1: 程瑞堂霸氣之王456</h1>
+                <h1>PLAYER 1:<br>程瑞堂霸氣之王456</h1>
                 <p>LEVEL 22 | DESIGNER & DEVELOPER</p>
-                <p style="margin-top: 10px; opacity: 0.8;">體適能健身C級教練</p>
-                </p>
+                <p class="subtitle">體適能健身C級教練</p>
                 
-                <div style="margin-top: 20px;">
+                <div class="social-links">
                     <a href="mailto:rexrex0u0@gmail.com" class="pixel-btn">📧 Email</a>
                     <a href="https://github.com/rex769" target="_blank" class="pixel-btn secondary">🐙 GitHub</a>
                     <a href="https://www.instagram.com/rxxeer/" class="pixel-btn tertiary">📷 Instagram</a>
@@ -292,8 +37,8 @@
         </section>
 
         <section id="skills" class="pixel-box">
-            <h2><span style="color:var(--accent-secondary)">#</span> SKILL STATS</h2>
-            <hr style="border: 2px solid #000; margin: 15px 0;">
+            <h2><span class="highlight-secondary">#</span> SKILL STATS</h2>
+            <hr class="divider">
             
             <div class="skill-item">
                 <div class="skill-name">
@@ -301,7 +46,7 @@
                     <span>90%</span>
                 </div>
                 <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 90%;"></div>
+                    <div class="progress-bar-fill" data-width="90%"></div>
                 </div>
             </div>
 
@@ -311,7 +56,7 @@
                     <span>80%</span>
                 </div>
                 <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 80%; background-color: var(--accent-tertiary);"></div>
+                    <div class="progress-bar-fill tertiary" data-width="80%"></div>
                 </div>
             </div>
 
@@ -321,71 +66,67 @@
                     <span>60%</span>
                 </div>
                 <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 60%; background-color: var(--accent-color);"></div>
+                    <div class="progress-bar-fill accent" data-width="60%"></div>
                 </div>
             </div>
         </section>
 
         <section id="experience" class="pixel-box">
-            <h2><span style="color:var(--accent-color)">#</span> ADVENTURE LOGS</h2>
-            <hr style="border: 2px solid #000; margin: 15px 0;">
+            <h2><span class="highlight-accent">#</span> ADVENTURE LOGS</h2>
+            <hr class="divider">
 
             <div class="timeline">
                 <div class="timeline-item">
-                    <span class="time-badge"> 2023-2024</span>
+                    <span class="time-badge">2023-2024</span>
                     <h3>醫學研究社社長</h3>
-                    <p>新莊高中醫學研究社</p>
-                    <p style="font-size: 0.9rem; margin-top:5px;">組織社團活動，帶領幹部們經營社團課程</p>
+                    <p class="org-name">新莊高中醫學研究社</p>
+                    <p class="description">組織社團活動，帶領幹部們經營社團課程</p>
                 </div>
 
                 <div class="timeline-item">
                     <span class="time-badge">2025</span>
                     <h3>營隊TA</h3>
-                    <p>St.Peter's</p>
-                    <p style="font-size: 0.9rem; margin-top:5px;">在為期三天的外語營隊中擔任外師助教</p>
+                    <p class="org-name">St.Peter's</p>
+                    <p class="description">在為期三天的外語營隊中擔任外師助教</p>
                 </div>
-
             </div>
         </section>
 
         <section id="projects">
-            <h2 style="margin-bottom: 20px; text-shadow: 2px 2px 0 #000;">
-                <span style="color:var(--accent-tertiary)">#</span> COMPLETED QUESTS
+            <h2 class="section-title">
+                <span class="highlight-tertiary">#</span> COMPLETED QUESTS
             </h2>
             
             <div class="projects-grid">
                 <div class="pixel-box project-card">
                     <div>
                         <h3>台大醫院服務學習</h3>
-                        <span class="project-role"></span>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">
-                           赴臺大醫院擔任志工，協助手術室正常運作
+                        <p class="description">
+                            赴臺大醫院擔任志工，協助手術室正常運作
                         </p>
                     </div>
-                    <a href="assets/台大醫院服務學習-新莊高中程瑞堂.pdf" class="pixel-btn secondary" style="margin-top: 20px; text-align: center; margin-right: 0;">VIEW PROJECT</a>
+                    <a href="assets/台大醫院服務學習-新莊高中程瑞堂.pdf" class="pixel-btn secondary fit-btn">VIEW PROJECT</a>
                 </div>
 
                 <div class="pixel-box project-card">
                     <div>
-                        <h3>多次接待國際學生導覽高中校園</h3>
+                        <h3>國際學生校園導覽</h3>
                         <span class="project-role">角色：主要講者</span>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">
+                        <p class="description">
                             與來自荷蘭以及美國年紀相仿的學生們交流，並共同探討環保等議題。
                         </p>
-                        </p>
                     </div>
-                    <a href="assets/與交換生有約—新莊高中程瑞堂.pdf" target="_blank" class="pixel-btn secondary" style="margin-top: 20px; text-align: center; margin-right: 0;">VIEW PROJECT</a>
+                    <a href="assets/與交換生有約—新莊高中程瑞堂.pdf" target="_blank" class="pixel-btn secondary fit-btn">VIEW PROJECT</a>
                 </div>
 
                 <div class="pixel-box project-card">
                     <div>
-                        <h3>描述自我之英文三折頁</h3>
-                        <span class="project-role"></span>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">
+                        <h3>英文自我三折頁</h3>
+                        <p class="description">
                             撰寫英文版本自我介紹，描述未來藍圖等相關計畫
                         </p>
                     </div>
-                    <a href="assets/31540程瑞堂英文三折頁.pdf.pdf" class="pixel-btn secondary" style="margin-top: 20px; text-align: center; margin-right: 0;">VIEW PROJECT</a>
+                    <a href="assets/31540程瑞堂英文三折頁.pdf.pdf" class="pixel-btn secondary fit-btn">VIEW PROJECT</a>
                 </div>
             </div>
         </section>
@@ -396,5 +137,6 @@
         <p>PRESS START TO CONTINUE &copy; 2024</p>
     </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>
